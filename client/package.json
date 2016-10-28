@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/webpack",
-    "build2": "./node_modules/.bin/webpack --config webpack.dev.config.js",
+    "build webpack-dev-server": "babel .\\dev --out-dir .\\dev_dist",
+    "start webpack-dev-server": "node .\\dev_dist\\webpack_dev_server_launcher.js",
     "start webpack-dev-server config": "webpack-dev-server --config webpack.dev.config.only-dev-server.js",
     "start webpack-dev-server --inline --hot": "webpack-dev-server --config webpack.dev.config.inline.hot.js --inline --hot"
   },
@@ -22,6 +23,7 @@
     "redux": "^3.6.0"
   },
   "devDependencies": {
+    "babel-cli": "^6.18.0",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",

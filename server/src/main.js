@@ -18,19 +18,19 @@ const clientPath = path.join(__dirname, '/../../client/dist');
 // ---------------------------------------------------------------------------
 // webpack-dev-server
 // ---------------------------------------------------------------------------
-if('development' == app.get('env')) {
-  const WebpackDevServer = require('webpack-dev-server');
-  const webpack = require('webpack');
-
-  console.log('Server is running on development mode');
-
-  const config = require(path.join(clientPath, '/../webpack.dev.config.js'));
-  const compiler = webpack(config);
-  const devServer = new WebpackDevServer(compiler, config.devServer);
-  devServer.listen(config.devServer.port, () => {
-    console.log('webpack-dev-server is listening on port', config.devServer.port);
-  });
-}
+// if('development' == app.get('env')) {
+//   const WebpackDevServer = require('webpack-dev-server');
+//   const webpack = require('webpack');
+//
+//   console.log('Server is running on development mode');
+//
+//   const config = require(path.join(clientPath, '/../webpack.dev.config.js'));
+//   const compiler = webpack(config);
+//   const devServer = new WebpackDevServer(compiler, config.devServer);
+//   devServer.listen(config.devServer.port, () => {
+//     console.log('webpack-dev-server is listening on port', config.devServer.port);
+//   });
+// }
 
 // ---------------------------------------------------------------------------
 // server
