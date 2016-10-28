@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/.bin/webpack",
-    "build webpack-dev-server": "babel .\\dev --out-dir .\\dev_dist",
-    "start webpack-dev-server": "node .\\dev_dist\\webpack_dev_server_launcher.js",
+    "pre:webpack-dev-server": "babel .\\webpack_dev_server_launcher.js --out-dir .\\dist",
+    ":webpack-dev-server": "node .\\dist\\webpack_dev_server_launcher.js",
     "start webpack-dev-server config": "webpack-dev-server --config webpack.dev.config.only-dev-server.js",
     "start webpack-dev-server --inline --hot": "webpack-dev-server --config webpack.dev.config.inline.hot.js --inline --hot"
   },
