@@ -5,10 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "babel .\\src --out-dir .\\dist",
-    "preproduction": "babel .\\src --out-dir .\\dist",
-    "production": "cross-env NODE_ENV=production node .\\dist\\main.js",
-    "predevelopment": "babel .\\src --out-dir .\\dist",
-    "development": "cross-env NODE_ENV=development node .\\dist\\main.js"
+    "production": "npm run build&&cross-env NODE_ENV=production node .\\dist\\main.js",
+    "development": "npm run build&&cross-env NODE_ENV=development node .\\dist\\main.js"
   },
   "keywords": [],
   "author": "",

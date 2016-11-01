@@ -5,11 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/webpack",
-    "pre:webpack-dev-server": "babel .\\webpack_dev_server_launcher.js --out-dir .\\dist",
-    ":webpack-dev-server": "node .\\dist\\webpack_dev_server_launcher.js",
-    "start webpack-dev-server config": "webpack-dev-server --config webpack.dev.config.only-dev-server.js",
-    "start webpack-dev-server --inline --hot": "webpack-dev-server --config webpack.dev.config.inline.hot.js --inline --hot"
+    "build": "webpack",
+    "webpack-dev-server:config": "npm run build&&webpack-dev-server --config webpack.dev.config.only-dev-server.js",
+    "webpack-dev-server:--inline --hot": "npm run build&&webpack-dev-server --config webpack.dev.config.inline.hot.js --inline --hot",
+    "webpack-dev-server:proxy": "npm run build&&webpack-dev-server --config webpack.dev.config.js"
   },
   "keywords": [],
   "author": "",
