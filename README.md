@@ -3,6 +3,9 @@
 > Feature
 
 * Webpack dev server
+* Session
+* Redis (Session Store)
+* Passport.js (ID/PW)* 
 
 > Design
 
