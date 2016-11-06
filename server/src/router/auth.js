@@ -18,7 +18,10 @@ export const loginSuccess = router.get(
 export const loginFail = router.get(
   '/login/fail',
   (req, res) => {
-    res.status(500).json({msg:'Fail to log-in.'});
+    res.status(500).json({
+      msg:'Fail to log-in.',
+      detail: req.flash('error')[0]
+    });
   }
 );
 

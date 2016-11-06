@@ -34,7 +34,7 @@ var sessionOpt = {
   saveUninitialized: false,
   cookie: {
    httpOnly: true,
-   maxAge: 60000,
+   maxAge: 3600000,
   },
   store: new redisStore({host: 'localhost', port: 6379})
 };
