@@ -36,12 +36,7 @@ passport.use(new LocalStrategy(
     } else {
       if('greenfrog' !== username) {
         console.log('authenticator.Local Strategy > Wrong id');
-        // return done(null, false, { message: 'Incorrect username.' });
-        try {
-          return done(null, false, { message: 'Incorrect username.' });
-        } catch(e) {
-          console.log('e', e);
-        }
+         return done(null, false, { message: 'Incorrect username.' });
       } else {
         console.log('authenticator.Local Strategy > Wrong password');
         return done(null, false, { message: 'Incorrect password.' });

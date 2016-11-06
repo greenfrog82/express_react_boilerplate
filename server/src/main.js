@@ -8,6 +8,7 @@ import requestLogger from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
 import connectRedis from 'connect-redis';
+import flash from 'connect-flash';
 
 // ---------------------------------------------------------------------------
 // biz module ..
@@ -43,6 +44,7 @@ var sessionOpt = {
 // ---------------------------------------------------------------------------
 
 app.use(session(sessionOpt));
+app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use((req, res, next) => {
@@ -60,6 +62,7 @@ app.use('/auth', loginSuccess);
 app.use('/auth', loginFail);
 
 if (app.get('env') === 'development') {
+  console.log('--- Setting Proxy Middleware');
   app.get('*', (request, response) => {
     console.log('proxy *');
     response.sendFile(path.join(clientPath, 'index.html'));
