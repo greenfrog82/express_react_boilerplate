@@ -7,6 +7,7 @@ import path from 'path';
 import requestLogger from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
+import connectRedis from 'connect-redis';
 
 // ---------------------------------------------------------------------------
 // biz module ..
@@ -22,8 +23,9 @@ import {login, logout, loginSuccess, loginFail} from './router/auth';
 // server
 // ---------------------------------------------------------------------------
 
-const clientPath = path.join(__dirname, '/../../client/dist');
+const clientPath = path.join(__dirname, '/../../view/dist');
 const app = express();
+const redisStore = connectRedis(session);
 
 var sessionOpt = {
   secret: '@#!@)($)*@#$)(#@$)(!@$*)',
@@ -32,7 +34,8 @@ var sessionOpt = {
   cookie: {
    httpOnly: true,
    maxAge: 60000,
-  }
+  },
+  store: new redisStore({host: 'localhost', port: 6379})
 };
 
 // ---------------------------------------------------------------------------
@@ -42,7 +45,13 @@ var sessionOpt = {
 app.use(session(sessionOpt));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use((req, res, next) => {
+  console.log('--- Session Checker Middleware');
+  console.log('--- Session ID : ', req.session.id);
+  console.log(req.session);
+  console.log('--- --------------------------');
+  next();
+});
 app.use('/', express.static(clientPath));
 authInitializer(app);
 app.use('/auth', login);
@@ -53,7 +62,7 @@ app.use('/auth', loginFail);
 if (app.get('env') === 'development') {
   app.get('*', (request, response) => {
     console.log('proxy *');
-    response.sendFile(path.resolve(clientPath, 'index.html'));
+    response.sendFile(path.join(clientPath, 'index.html'));
   });
 }
 
