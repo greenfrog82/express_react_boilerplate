@@ -1,0 +1,11 @@
+# distribution
+*dist
+
+# node_modules
+node_modules
+<<<<<<< HEAD
+
+# logs
+*.log
+=======
+>>>>>>> f7dae26c8fe45fbf4d462913efd78ebd2c108be9

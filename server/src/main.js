@@ -7,34 +7,26 @@ import path from 'path';
 import requestLogger from 'morgan';
 import session from 'express-session';
 import bodyParser from 'body-parser';
+import connectRedis from 'connect-redis';
+import flash from 'connect-flash';
+
+// ---------------------------------------------------------------------------
+// biz module ..
+// ---------------------------------------------------------------------------
+import authInitializer from './auth/authenticator';
 
 // ---------------------------------------------------------------------------
 // router
 // ---------------------------------------------------------------------------
-
-const app = express();
-const clientPath = path.join(__dirname, '/../../client/dist');
-
-// ---------------------------------------------------------------------------
-// webpack-dev-server
-// ---------------------------------------------------------------------------
-if('development' == app.get('env')) {
-  const WebpackDevServer = require('webpack-dev-server');
-  const webpack = require('webpack');
-
-  console.log('Server is running on development mode');
-
-  const config = require(path.join(clientPath, '/../webpack.dev.config.js'));
-  const compiler = webpack(config);
-  const devServer = new WebpackDevServer(compiler, config.devServer);
-  devServer.listen(config.devServer.port, () => {
-    console.log('webpack-dev-server is listening on port', config.devServer.port);
-  });
-}
+import {login, logout, loginSuccess, loginFail} from './router/auth';
 
 // ---------------------------------------------------------------------------
 // server
 // ---------------------------------------------------------------------------
+
+const clientPath = path.join(__dirname, '/../../view/dist');
+const app = express();
+const redisStore = connectRedis(session);
 
 var sessionOpt = {
   secret: '@#!@)($)*@#$)(#@$)(!@$*)',
@@ -42,8 +34,9 @@ var sessionOpt = {
   saveUninitialized: false,
   cookie: {
    httpOnly: true,
-   maxAge: 60000,
-  }
+   maxAge: 3600000,
+  },
+  store: new redisStore({host: 'localhost', port: 6379})
 };
 
 // ---------------------------------------------------------------------------
@@ -51,18 +44,34 @@ var sessionOpt = {
 // ---------------------------------------------------------------------------
 
 app.use(session(sessionOpt));
+app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use((req, res, next) => {
+  console.log('--- Session Checker Middleware');
+  console.log('--- Session ID : ', req.session.id);
+  console.log(req.session);
+  console.log('--- --------------------------');
+  next();
+});
 app.use('/', express.static(clientPath));
+authInitializer(app);
+app.use('/auth', login);
+app.use('/auth', logout);
+app.use('/auth', loginSuccess);
+app.use('/auth', loginFail);
 
 if (app.get('env') === 'development') {
+  console.log('--- Setting Proxy Middleware');
   app.get('*', (request, response) => {
-    response.sendFile(path.resolve(clientPath, 'index.html'));
+    console.log('proxy *');
+    response.sendFile(path.join(clientPath, 'index.html'));
   });
 }
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  console.log('404');
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -70,6 +79,7 @@ app.use(function(req, res, next) {
 
 // error handlers
 app.use(function(err, req, res, next) {
+  console.log('error handlers');
   res.status(err.status || 500).json(err);
 });
 
@@ -79,5 +89,6 @@ app.use(function(err, req, res, next) {
 // ----------------------------------------------------------------------------
 const port = 3000;
 const server = app.listen(port, () => {
+  console.log(app.get('env') === 'development'? '--development': '--production');
   console.log('Server is listening on port : ', port);
 });
