@@ -28,7 +28,11 @@ passport.deserializeUser(function(user, done) {
 });
 
 passport.use(new LocalStrategy(
-  function(username, password, done) {
+  {
+    passReqToCallback: true,
+  },
+  function(req, username, password, done) {
+    console.log('authenticator.LocalStrategy.req > ', req.session);
     console.log('authenticator.LocalStrategy > ', username + ' : ' + password);
 
     if('greenfrog' === username && '1234' === password) {
