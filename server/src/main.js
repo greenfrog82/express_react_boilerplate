@@ -60,7 +60,12 @@ app.use('/auth', login);
 app.use('/auth', logout);
 app.use('/auth', loginSuccess);
 app.use('/auth', loginFail);
-
+app.get('/test', (req, res) =>{
+  console.log('/text');
+  res.json({
+    msg: '[ECHO] ' + req.query.msg
+  });
+});
 if (app.get('env') === 'development') {
   console.log('--- Setting Proxy Middleware');
   app.get('*', (request, response) => {
