@@ -1,0 +1,11 @@
+redis:
+  image: redis
+
+node_env:
+  build: .
+  ports:
+    - 3000:3000
+  volumes:
+    - ./src:/app
+  links:
+    - redis

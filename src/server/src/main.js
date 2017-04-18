@@ -5,9 +5,9 @@ import express from 'express';
 import path from 'path';
 // import favicon from 'serve-favicon';
 import requestLogger from 'morgan';
-import session from 'express-session';
+// import session from 'express-session';
 import bodyParser from 'body-parser';
-import connectRedis from 'connect-redis';
+//import connectRedis from 'connect-redis';
 import flash from 'connect-flash';
 
 // ---------------------------------------------------------------------------
@@ -24,56 +24,56 @@ import {login, logout, loginSuccess, loginFail} from './router/auth';
 // server
 // ---------------------------------------------------------------------------
 
-const clientPath = path.join(__dirname, '/../../view/dist');
+// const clientPath = path.join(__dirname, '/../../view/dist');
 const app = express();
-const redisStore = connectRedis(session);
+// const redisStore = connectRedis(session);
 
-var sessionOpt = {
-  secret: '@#!@)($)*@#$)(#@$)(!@$*)',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-   httpOnly: true,
-   maxAge: 3600000,
-  },
-  store: new redisStore({host: 'localhost', port: 6379})
-};
-
+// var sessionOpt = {
+//   secret: '@#!@)($)*@#$)(#@$)(!@$*)',
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//    httpOnly: true,
+//    maxAge: 3600000,
+//   },
+//   store: new redisStore({host: 'localhost', port: 6379})
+// };
+//
 // ---------------------------------------------------------------------------
 // middleware
 // ---------------------------------------------------------------------------
 
-app.use(session(sessionOpt));
+// app.use(session(sessionOpt));
 app.use(flash());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use((req, res, next) => {
-  console.log('--- Session Checker Middleware');
-  console.log('--- Session ID : ', req.session.id);
-  console.log(req.session);
-  console.log('--- --------------------------');
-  next();
-});
-app.use('/', express.static(clientPath));
-authInitializer(app);
-app.use('/auth', login);
-app.use('/auth', logout);
-app.use('/auth', loginSuccess);
-app.use('/auth', loginFail);
-app.get('/test', (req, res) =>{
+// app.use((req, res, next) => {
+//   console.log('--- Session Checker Middleware');
+//   console.log('--- Session ID : ', req.session.id);
+//   console.log(req.session);
+//   console.log('--- --------------------------');
+//   next();
+// });
+// app.use('/', express.static(clientPath));
+// authInitializer(app);
+// app.use('/auth', login);
+// app.use('/auth', logout);
+// app.use('/auth', loginSuccess);
+// app.use('/auth', loginFail);
+app.get('/', (req, res) =>{
   console.log('/text');
   res.json({
     msg: '[ECHO] ' + req.query.msg
   });
 });
-if (app.get('env') === 'development') {
-  console.log('--- Setting Proxy Middleware');
-  app.get('*', (request, response) => {
-    console.log('proxy *');
-    response.sendFile(path.join(clientPath, 'index.html'));
-  });
-}
-
+// if (app.get('env') === 'development') {
+//   console.log('--- Setting Proxy Middleware');
+//   app.get('*', (request, response) => {
+//     console.log('proxy *');
+//     response.sendFile(path.join(clientPath, 'index.html'));
+//   });
+// }
+//
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   console.log('404');
